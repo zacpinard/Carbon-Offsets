@@ -104,7 +104,7 @@ function createPopupContent(properties, attribute){
 function pointToLayer(feature, latlng, attributes){
     
     //Step 4: Assign the current attribute based on the first index of the attributes array
-    var attribute = attributes[0];
+    var attribute = attributes["Total_Number_of_Offset_Credits_Registered"];
     //check
     console.log(attribute);
 
