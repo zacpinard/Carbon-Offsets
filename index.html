@@ -6,7 +6,7 @@
             <title></title>
 
         <!--put your external stylesheet links here-->
-
+        <link rel="stylesheet" href="lib/leaflet/leaflet.css">
         <link rel="stylesheet" href="css/style.css">
         <!--[if IE<9]>
             <link rel="stylesheet" href="css/style.ie.css">
@@ -21,14 +21,17 @@
         <h1 id="title">Forest Carbon Offsets Map</h1>
         <p id="text">California, Washington, and Quebec are currently the only states/provinces in North America with economy-wide carbon markets. This map displays the forest carbon offet projects registered in those carbon markets.</p> 
         <!--put your initial page content here-->
-        
+        <div id="map"></div>
         <!--you can also use this space for internal scripts;
         place these within <script> tags-->
         
         <!--put your external script links here-->
-        <script type="text/javascript" src="lib/d3.js"></script>
+        
+        <!-- <script type="text/javascript" src="lib/d3.js"></script>
         <script type="text/javascript" src="lib/topojson.min.js"></script>
-        <script type="text/javascript" src="lib/simple-statistics.js"></script>
+        <script type="text/javascript" src="lib/simple-statistics.js"></script> -->
+        <script type="text/javascript" src="lib/leaflet/leaflet-src.js"></script>
+        <script type="text/javascript" src="lib/leaflet-providers.js"></script>
         <script type="text/javascript" src="js/main.js"></script>
     </body>
 </html>

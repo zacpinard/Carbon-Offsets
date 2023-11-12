@@ -1,0 +1,79 @@
+/* Stylesheet by Zac Pinard, 2023 */
+
+body{
+    background-color: rgb(34, 139, 34);
+}
+
+/*Styling state borders in style.css 
+.states {
+    fill: #FFD580;
+    stroke: #D27D2D;
+    stroke-width: 2px;
+}*/
+
+.projects {
+    fill: #7CFC00;
+    stroke: #6a4a3a;
+    stroke-width: 2px;
+}
+
+
+@font-face {
+    font-family: 'Tribeca';
+    src: URL('/assets/tribeca/Tribeca.ttf') format('truetype');
+    color: #553b32;
+}
+
+#title { 
+    font-family: 'Tribeca';
+    color: whitesmoke
+}
+
+#text {
+    font-family: Goudy Old Style;
+    font-weight: bold;
+    font-size: 1.25em;
+    color: whitesmoke
+}
+
+
+#map { height: 500px;
+    width: 90%;
+    display: inline-block;
+}
+
+.legend-control-container {  
+    width: 180px;  
+    height: 80px;  
+    background-color: rgba(255,255,255,0.8);  
+    padding: 15px;  
+    line-height: 1px;  
+    text-align: center;  
+    border: solid rgb(34, 139, 34) 2px;
+}
+
+.range-slider {  
+    width: 250px;  
+}  
+
+.step {  
+    width: 40px;  
+}  
+
+.step img {  
+    width: 100%;  
+    height: auto;  
+} 
+
+#forward {
+    float: right;
+    }
+    
+#reverse {  
+    float: left;  
+}
+
+/*Example 2.3: Adjusting popup content margins in style.css */
+.leaflet-popup-content p {
+    margin: 0.2em 0;
+}

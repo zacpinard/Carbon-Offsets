@@ -1,0 +1,335 @@
+{
+    "type": "FeatureCollection",
+    "features": [
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -100.3161,
+                    25.6866
+                ]
+            },
+            "properties": {
+                "city": "Monterrey",
+                "latitude": 25.6866,
+                "longitude": -100.3161,
+                "yr2017": 4633000,
+                "yr2018": 4712000,
+                "yr2019": 4793000,
+                "yr2020": 4874000,
+                "yr2021": 4956000,
+                "yr2022": 5037000,
+                "yr2023": 5117000
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -103.3496,
+                    20.6597
+                ]
+            },
+            "properties": {
+                "city": "Guadalajara",
+                "latitude": 20.6597,
+                "longitude": -103.3496,
+                "yr2017": 4946000,
+                "yr2018": 5023000,
+                "yr2019": 5101000,
+                "yr2020": 5179000,
+                "yr2021": 5259000,
+                "yr2022": 5340000,
+                "yr2023": 5420000
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -106.4245,
+                    31.6904
+                ]
+            },
+            "properties": {
+                "city": "Ciudad Juarez",
+                "latitude": 31.6904,
+                "longitude": -106.4245,
+                "yr2017": 1461000,
+                "yr2018": 1480000,
+                "yr2019": 1499000,
+                "yr2020": 1519000,
+                "yr2021": 1540000,
+                "yr2022": 1561000,
+                "yr2023": 1582000
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -97.5027,
+                    25.869
+                ]
+            },
+            "properties": {
+                "city": "Matamoros",
+                "latitude": 25.869,
+                "longitude": -97.5027,
+                "yr2017": 540000,
+                "yr2018": 547000,
+                "yr2019": 555000,
+                "yr2020": 563000,
+                "yr2021": 571000,
+                "yr2022": 579000,
+                "yr2023": 587000
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -98.2979,
+                    26.0508
+                ]
+            },
+            "properties": {
+                "city": "Reynosa",
+                "latitude": 26.0508,
+                "longitude": -98.2979,
+                "yr2017": 845000,
+                "yr2018": 863000,
+                "yr2019": 881000,
+                "yr2020": 899000,
+                "yr2021": 917000,
+                "yr2022": 935000,
+                "yr2023": 951000
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -99.5496,
+                    27.4779
+                ]
+            },
+            "properties": {
+                "city": "Nuevo Laredo",
+                "latitude": 27.4779,
+                "longitude": -99.5496,
+                "yr2017": 427000,
+                "yr2018": 434000,
+                "yr2019": 440000,
+                "yr2020": 447000,
+                "yr2021": 453000,
+                "yr2022": 460000,
+                "yr2023": 467000
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -106.0691,
+                    28.633
+                ]
+            },
+            "properties": {
+                "city": "Chihuahua",
+                "latitude": 28.633,
+                "longitude": -106.0691,
+                "yr2017": 991000,
+                "yr2018": 1012000,
+                "yr2019": 1033000,
+                "yr2020": 1055000,
+                "yr2021": 1076000,
+                "yr2022": 1096000,
+                "yr2023": 1116000
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -101.4215,
+                    26.908
+                ]
+            },
+            "properties": {
+                "city": "Monclova",
+                "latitude": 26.908,
+                "longitude": -101.4215,
+                "yr2017": 347000,
+                "yr2018": 352000,
+                "yr2019": 356000,
+                "yr2020": 361000,
+                "yr2021": 366000,
+                "yr2022": 371000,
+                "yr2023": 376000
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -115.4523,
+                    32.6245
+                ]
+            },
+            "properties": {
+                "city": "Mexicali",
+                "latitude": 32.6245,
+                "longitude": -115.4523,
+                "yr2017": 1063000,
+                "yr2018": 1082000,
+                "yr2019": 1101000,
+                "yr2020": 1121000,
+                "yr2021": 1140000,
+                "yr2022": 1160000,
+                "yr2023": 1178000
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -117.0382,
+                    32.5149
+                ]
+            },
+            "properties": {
+                "city": "Tijuana",
+                "latitude": 32.5149,
+                "longitude": -117.0382,
+                "yr2017": 2018000,
+                "yr2018": 2058000,
+                "yr2019": 2099000,
+                "yr2020": 2140000,
+                "yr2021": 2181000,
+                "yr2022": 2221000,
+                "yr2023": 2260000
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -100.9737,
+                    25.4383
+                ]
+            },
+            "properties": {
+                "city": "Saltillo",
+                "latitude": 25.4383,
+                "longitude": -100.9737,
+                "yr2017": 933000,
+                "yr2018": 950000,
+                "yr2019": 967000,
+                "yr2020": 984000,
+                "yr2021": 1001000,
+                "yr2022": 1018000,
+                "yr2023": 1034000
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -110.9559,
+                    29.073
+                ]
+            },
+            "properties": {
+                "city": "Hermosillo",
+                "latitude": 29.073,
+                "longitude": -110.9559,
+                "yr2017": 820000,
+                "yr2018": 836000,
+                "yr2019": 852000,
+                "yr2020": 868000,
+                "yr2021": 884000,
+                "yr2022": 900000,
+                "yr2023": 915000
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -109.9304,
+                    27.4828
+                ]
+            },
+            "properties": {
+                "city": "Ciudad Obregon",
+                "latitude": 27.4828,
+                "longitude": -109.9304,
+                "yr2017": 349000,
+                "yr2018": 357000,
+                "yr2019": 365000,
+                "yr2020": 372000,
+                "yr2021": 380000,
+                "yr2022": 388000,
+                "yr2023": 395000
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -104.6532,
+                    24.0277
+                ]
+            },
+            "properties": {
+                "city": "Durango",
+                "latitude": 24.0277,
+                "longitude": -104.6532,
+                "yr2017": 596000,
+                "yr2018": 607000,
+                "yr2019": 619000,
+                "yr2020": 631000,
+                "yr2021": 643000,
+                "yr2022": 654000,
+                "yr2023": 666000
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -100.9855,
+                    22.1565
+                ]
+            },
+            "properties": {
+                "city": "San Luis Potosi",
+                "latitude": 22.1565,
+                "longitude": -100.9855,
+                "yr2017": 1161000,
+                "yr2018": 1179000,
+                "yr2019": 1198000,
+                "yr2020": 1217000,
+                "yr2021": 1235000,
+                "yr2022": 1254000,
+                "yr2023": 1273000
+            }
+        }
+    ]
+}

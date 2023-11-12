@@ -1,494 +1,231 @@
-(function(){  //localize everything to this .js file by wrapping it in a function
+/* Main Javascript sheet by Zac Pinard, 2023 */
 
-    //pseudo-global variables
-    //variables for data join
-    var attrArray = ["ELEPHANT", "LION", "LEOPARD", "BUFFALO", "RHINO","ID"]; //list of attributes
-    var expressed = attrArray[0]; //initial attribute
+/* Map of GeoJSON data from Offsets_Data_test_2.geojson */
+
+var dataStats = {};
+
+//function to instantiate the Leaflet map
+function createMap() {
+    //create the map
+    var map = L.map('map', {
+        center: [40, -95],
+        zoom: 3.5
+    });
+
+    //add OSM base tilelayer
+    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}', {
+        attribution: 'Tiles &copy; Esri &mdash; National Geographic, Esri, DeLorme, NAVTEQ, UNEP-WCMC, USGS, NASA, ESA, METI, NRCAN, GEBCO, NOAA, iPC',
+        maxZoom: 16
+        //L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        //attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>'
+    }).addTo(map);
     
-    //chart frame dimensions
-    var chartWidth = window.innerWidth * 0.425,
-        chartHeight = 473,
-        leftPadding = 45,
-        rightPadding = 2,
-        topBottomPadding = 5,
-        chartInnerWidth = chartWidth - leftPadding - rightPadding,
-        chartInnerHeight = chartHeight - topBottomPadding * 2,
-        translate = "translate(" + leftPadding + "," + topBottomPadding + ")";
+    //call getData function
+    getData(map);
+};
+
+function calculateMinValue(data){
+    //create empty array to store all data values
+    var allValues = [];
+    //loop through each project
+    for(var project of data.features){
+        //get credits for each project
+        var value = project.properties["Total_Number_of_Offset_Credits_Registered"];
+        //add value to array
+        allValues.push(value);
+    }
+    //get minimum value of our array
+    var minValue = Math.min(...allValues)
+
+    return minValue;
+}
+
+//calculate the radius of each proportional symbol
+function calcPropRadius(attValue) {
+    //constant factor adjusts symbol sizes evenly
+    var minRadius = 5;
+    //Flannery Apperance Compensation formula
+    var radius = 1.0083 * Math.pow(attValue/minValue,0.366) * minRadius
     
-    //create a scale to size bars proportionally to frame and for axis
-    var yScale = d3.scaleLinear()
-        .range([463, 0])
-        .domain([0, 70000]);
+    return radius;
+};
+
+//function to attach popups to each mapped featureg
+function onEachFeature(feature, layer) {
+};
+
+//Step 2: Import GeoJSON data
+//function to retrieve the data and place it on the map
+function getData(map) {
     
+    //load the data
+    fetch("data/Offsets_Data_test_2.geojson")
+        
+        .then(function (response) {
+            return response.json();
+        })
+        
+        .then(function (json) {
+            //create an attributes array
+            var attributes = processData(json);
+            minValue = calculateMinValue(json);
+            //call function to create proportional symbols
+            createPropSymbols(json, map, attributes);
+            calcStats(json);
+            createLegend(attributes, map)
+            //calling our renamed function  
+        })
+        
+}
+
+//Step 3: Add circle markers for point features to the map
+function createPropSymbols(data, map, attributes) {
     
-    
-    //begin script when window loads
-    window.onload = setMap();
-    
-    //set up choropleth map
-    function setMap(){
-    
-        //map frame dimensions
-        var width = window.innerWidth * 0.5,
-            height = 650;
-    
-        //create new svg container for the map
-        var map = d3.select("body")
-            .append("svg")
-            .attr("class", "map")
-            .attr("width", width)
-            .attr("height", height);
-    
-        //create Albers equal area conic projection centered on Africa
-        var projection = d3.geoAlbers()
-            .center([0.00, 26])
-            .rotate([-26.06, 39.01, 0])
-            .parallels([45.00, 32.54])
-            .scale(900)
-            .translate([width / 2, height / 2])
-    
-        var path = d3.geoPath()
-            .projection(projection);
-    
-    
-    
-    
-    
-        //use Promise.all to parallelize asynchronous data loading
-        var promises = [d3.csv("data/Offsets_Data.csv"),                                       
-                        ];
-          
-        Promise.all(promises).then(callback);
-    
-    
-    
-    
-    
-        function callback(data){    
-            csvData = data[0];        
-            Parks = data[1];
-            Land = data[2];
-            //console.log(csvData);
-            console.log(Parks);    
-    
-    
-            //place graticule on the map
-            setGraticule(map, path);
-    
-            //translate National Parks TopoJSON
-            var africanCountries = topojson.feature(Land, Land.objects.AfricanCountries),
-                nationalParks = topojson.feature(Parks, Parks.objects.NationalParks_polygons).features;
+    //create a Leaflet GeoJSON layer and add it to the map
+    L.geoJson(data, {
+        pointToLayer: function(feature, latlng){
             
-            //add African Land (countries) to map
-            var AfricanLand = map.append("path")
-                .datum(africanCountries)
-                .attr("class", "countries")
-                .attr("d", path);
-    
-            //join csv data to GeoJSON enumeration units
-            nationalParks = joinData(nationalParks, csvData);
-    
-            var colorScale = makeColorScale(csvData);
-    
-            //add enumeration units to the map
-            setEnumerationUnits(nationalParks, map, path, colorScale);
-    
-            //add coordinated visualization to the map
-            setChart(csvData, colorScale);
-    
-            //add dropdown menu
-            createDropdown(csvData, colorScale)
+            return pointToLayer(feature, latlng, attributes);
         }
-    }
+    }).addTo(map),
+    console.log('hello');
+}
+
+function createPopupContent(properties, attribute){
+    //add city to popup content string
+    var popupContent = "<p><b>Project Name:</b> " + properties.project + "</p>";
+    popupContent += "<p><b>Carbon Credits Issued: </b><h2>" + properties[attribute] + "</h2></p>";
+
+    return popupContent;
+};
+
+//Replace the anonymous function within the createPropSymbols() function with a call 
+//to the new pointToLayer() function
+function pointToLayer(feature, latlng, attributes){
     
-    //function to create a dropdown menu for attribute selection
-    function createDropdown(){
-        //add select element
-        var dropdown = d3.select("body")
-            .append("select")
-            .attr("class", "dropdown")
-            .on("change", function(){
-                changeAttribute(this.value, csvData)
-            });
-    
-        //add initial option
-        var titleOption = dropdown.append("option")
-            .attr("class", "titleOption")
-            .attr("disabled", "true")
-            .text("Select Species");
-        
-        var attrArray2 = ["ELEPHANT", "LION", "LEOPARD", "BUFFALO", "RHINO"]; //list of attributes
-    
-        //add attribute name options
-        var attrOptions = dropdown.selectAll("attrOptions")
-            .data(attrArray2)
-            .enter()
-            .append("option")
-            .attr("value", function(d){ return d })
-            .text(function(d){ return d });
-    
-        var top = document.querySelector(".map").getBoundingClientRect().top + 20,
-            left =  document.querySelector(".map").getBoundingClientRect().left;
-            document.querySelector(".dropdown").style.top = top + "px";
-    
-        console.log(document.querySelector(".dropdown"))
+    //Step 4: Assign the current attribute based on the first index of the attributes array
+    var attribute = attributes[0];
+    //check
+    console.log(attribute);
+
+    //create marker options
+    var geojsonMarkerOptions = {
+        radius: 8,
+        fillColor: "#B22222",
+        color: "#000",
+        weight: 1,
+        opacity: 1,
+        fillOpacity: 0.8
     };
-    
-    //dropdown change event handler
-    function changeAttribute(attribute, csvData) {
-        //change the expressed attribute
-        expressed = attribute;
-    
-        //recreate the color scale
-        var colorScale = makeColorScale(csvData);
-    
-        //recolor enumeration units
-        var parks = d3.selectAll(".parks")
-            .transition()
-            .duration(1000)
-            .style("fill", function (d) {
-                    var value = d.properties[expressed];
-                    if (value == -1) {
-                        return "#ACADA8"; 
-                    } else if (value == 0) {                
-                        return "#ffffff";            
-                    } else {
-                        return colorScale(d.properties[expressed]);  
-                    }
-        });     
-    
-        //Sort, resize, and recolor bars
-        var bars = d3.selectAll(".bar")
-            //Sort bars
-            .sort(function(a, b){
-                return b[expressed] - a[expressed];
-            })
-            .transition() //add animation
-            .delay(function(d, i){
-                return i * 60
-            })
-            .duration(500);
-    
-        console.log(bars)
-           
-        updateChart(bars, csvData.length, colorScale);
-    }
-    
-    function setGraticule(map, path){
-        //create graticule generator
-        var graticule = d3.geoGraticule()
-            .step([5, 5]); //place graticule lines every 5 degrees of longitude and latitude
+
+    //Step 5: For each feature, determine its value for the selected attribute
+    var attValue = Number(feature.properties[attribute]);
+
+    //Step 6: Give each feature's circle marker a radius based on its attribute value
+    geojsonMarkerOptions.radius = calcPropRadius(attValue);
+
+    //create circle marker layer
+    var layer = L.circleMarker(latlng, geojsonMarkerOptions);
+
+    var popupContent = createPopupContent(feature.properties, attribute);
+
+    //bind the popup to the circle marker
+    layer.bindPopup(popupContent, {
+        offset: new L.Point(0,-geojsonMarkerOptions.radius) 
+    });
+
+    //return the circle marker to the L.geoJson pointToLayer option
+    return layer;
+}
+
+//Example 2.7: Adding a legend control in main.js
+
+
+function createLegend(attributes, map){
+    var LegendControl = L.Control.extend({
+        options: {
+            position: 'topleft'
+        },
         
-        //create graticule background
-        var gratBackground = map.append("path")
-            .datum(graticule.outline()) //bind graticule background
-            .attr("class", "gratBackground") //assign class for styling
-            .attr("d", path) //project graticule
+        onAdd: function () {
+            // create the control container with a particular class name
+            var container = L.DomUtil.create('div', 'legend-control-container');
+
+            //PUT YOUR SCRIPT TO CREATE THE TEMPORAL LEGEND HERE
+            //add formatted attribute to panel content string
+            container.insertAdjacentHTML('beforeend', "<p><b>Offset Project Carbon Credits</b></p>")
+
+            //Step 1: start attribute legend svg string
+            var svg = '<svg id="attribute-legend" width="160px" height="60px">';
+
+            //array of circle names to base loop on
+            var circles = ["max", "mean", "min"];
+
+            //Step 2: loop to add each circle and text to svg string
+            for (var i=0; i<circles.length; i++){  
+                console.log(dataStats[circles[i]])
+                //Step 3: assign the r and cy attributes  
+                var radius = calcPropRadius(dataStats[circles[i]]);  
+                var cy = 59 - radius;  
     
-        //create graticule lines
-        var gratLines = map.selectAll(".gratLines") //select graticule elements that will be created
-            .data(graticule.lines()) //bind graticule lines to each element to be created
-            .enter() //create an element for each datum
-            .append("path") //append each element to the svg as a path element
-            .attr("class", "gratLines") //assign class for styling
-            .attr("d", path); //project graticule lines
-    };       
-    
-    function joinData(nationalParks, csvData){
-        //loop through csv to assign each set of csv attribute values to geojson region
-        for (var i=0; i<csvData.length; i++){
-            var csvPark = csvData[i]; //the current region
-            var csvKey = csvPark.NationalPark; //the CSV primary key
-    
-            //loop through geojson regions to find correct region
-            for (var a=0; a<nationalParks.length; a++){
-    
-                var geojsonProps = nationalParks[a].properties; //the current region geojson properties
-                var geojsonKey = geojsonProps.NAME; //the geojson primary key
-    
-                //where primary keys match, transfer csv data to geojson properties object
-                if (geojsonKey == csvKey){
-    
-                    //assign all attributes and values
-                    attrArray.forEach(function(attr){
-                        var val = parseFloat(csvPark[attr]); //get csv attribute value
-                        geojsonProps[attr] = val; //assign attribute and value to geojson properties
-                    });
-                };
+                //circle string  
+                svg += '<circle class="legend-circle" id="' + circles[i] + '" r="' + radius + '"cy="' + cy + '" fill="#B22222" fill-opacity="0.8" stroke="#000000" cx="30"/>';
+                
+                 //evenly space out labels            
+                var textY = i * 20 + 20;            
+
+                //text string            
+                svg += '<text id="' + circles[i] + '-text" x="65" y="' + textY + '">' + Math.round(dataStats[circles[i]]*100)/100 + '</text>';
             };
-        };
-    
-        return nationalParks;
+
+        //close svg string
+        svg += "</svg>";
+
+        //add attribute legend svg to container
+        container.insertAdjacentHTML('beforeend',svg);
+
+            return container;
+        }
+    });
+
+    map.addControl(new LegendControl());
+};
+
+function processData(data){
+    //empty array to hold attributes
+    var attributes = [];
+
+    //properties of the first feature in the dataset
+    var properties = data.features[0].properties;
+
+    //push each attribute name into attributes array
+    for (var attribute in properties){
+        attributes.push(attribute);
     };
-    
-    function setEnumerationUnits(nationalParks, map, path, colorScale){
-        //add National Parks to map
-        var parks = map.selectAll(".parks")
-            .data(nationalParks)
-            .enter()
-            .append("path")
-            .attr("class", function(d){
-                console.log(d.properties)
-                return "parks d" + d.properties.ID;
-            })
-            .attr("d", path)
-            .style("fill", function(d){
-                var value = d.properties[expressed];
-                if (value == -1) {
-                    return "#ACADA8"; 
-                } else if (value == 0) {                
-                    return "#ffffff";            
-                } else {
-                    return colorScale(d.properties[expressed]);  
-                }
-            })
-            .on("mouseover", function(event, d){
-                highlight(d.properties);
-            })
-            .on("mouseout", function(event, d){
-                dehighlight(d.properties);
-            })
-            .on("mousemove", moveLabel);
-            var desc = parks.append("desc")
-                .text('{"stroke": "#6a4a3a", "stroke-width": "2px"}')
-    
-        //console.log(africanCountries)
-        console.log(nationalParks)
-    };
-    
-    //function to create color scale generator
-    function makeColorScale(data){
-        var colorClasses = [
-            "#c7e9c0",
-            "#74c476",
-            "#238b45",
-            "#005a32"
-        ];
-        
-        //create color scale generator
-        var colorScale = d3.scaleThreshold()
-            .range(colorClasses);
-    
-        //build array of all values of the expressed attribute
-        var domainArray = [];
-        for (var i=0; i<data.length; i++){
-            var val = parseFloat(data[i][expressed]);
-            domainArray.push(val);
-        };
-    
-        //cluster data using ckmeans clustering algorithm to create natural breaks
-        var clusters = ss.ckmeans(domainArray, 4);
-    
-        console.log(clusters)
-    
-        //reset domain array to cluster minimums
-        domainArray = clusters.map(function(d){
-            return d3.min(d);
-        });
-        //remove first value from domain array to create class breakpoints
-        domainArray.shift();
-    
-        //assign array of last 4 cluster minimums as domain
-        colorScale.domain(domainArray);
-    
-        return colorScale;
-    };
-    
-    //function to create coordinated bar chart
-    function setChart(csvData, colorScale){
-        
-    
-        //create a second svg element to hold the bar chart
-        var chart = d3.select("body")
-            .append("svg")
-            .attr("width", chartWidth)
-            .attr("height", chartHeight)
-            .attr("class", "chart");
-    
-        //set bars for each province
-        var bars = chart.selectAll(".bar")
-            .data(csvData)
-            .enter()
-            .append("rect")
-            .sort(function(a, b){
-                return b[expressed]-a[expressed]
-            })
-            .attr("class", function(d){
-                return "bar d" + d.ID;
-            })
-            .attr("width", chartInnerWidth / csvData.length - 1)
-            .attr("x", function(d, i){
-                return i * (chartInnerWidth / csvData.length) + leftPadding;
-            })
-            .attr("height", function(d, i){
-                return chartInnerHeight - yScale(parseFloat(d[expressed]));
-            })
-            .attr("y", function(d, i){
-                return yScale(parseFloat(d[expressed])) + topBottomPadding;
-            })
-            .style("fill", function(d){
-                return colorScale(d[expressed]);
-            })
-            .on("mouseover", function(event, d){
-                highlight(d);
-            })
-            .on("mouseout", function(event, d){
-                dehighlight(d);
-            })
-            .on("mousemove", moveLabel);
-        var desc = bars.append("desc")
-            .text('{"stroke": "none", "stroke-width": "0px"}');
-    
-        //annotate bars with attribute value text
-       /* var numbers = chart.selectAll(".numbers")
-            .data(csvData)
-            .enter()
-            .append("text")
-            .sort(function(a, b){
-                return b[expressed]-a[expressed]
-            })
-            .attr("class", function(d){
-                return "numbers " + d.ID;
-            })
-            .attr("text-anchor", "middle")
-            .attr("width", chartInnerWidth / csvData.length - 1)
-    
-            .attr("x", function(d, i){
-                var fraction = chartWidth / csvData.length;
-                return i * fraction + (fraction - 1) / 2;
-            })
-            .attr("y", function(d, i){
-                return yScale(parseFloat(d[expressed])) + topBottomPadding;
-            })
-            .text(function(d){
-                return d[expressed];
-            });*/
-    
-        //create vertical axis generator
-        var yAxis = d3.axisLeft()
-            .scale(yScale);
-    
-        //place axis
-        var axis = chart.append("g")
-            .attr("class", "axis")
-            .attr("transform", translate)
-            .call(yAxis);
-    
-        var chartTitle = chart.append("text")
-            .attr("x", 100)
-            .attr("y", 28)
-            .attr("class", "chartTitle")
-            .text("Number of " + expressed + "S in each National Park");
-    
-        //set bar positions, heights, and colors
-        updateChart(bars, csvData.length, colorScale);    
-    };
-    
-    //function to position, size, and color bars in chart
-    function updateChart(bars, n, colorScale){
-        
-        //position bars
-        bars.attr("x", function(d, i){
-            return i * (chartInnerWidth / n) + leftPadding;
-            })
-            .attr("height", function(d, i){
-                if (isNaN(parseFloat(d[expressed])))
-                    return chartInnerHeight - yScale(0);
-                else
-                    return chartInnerHeight - yScale(parseFloat(d[expressed]));
-            })
-            .attr("y", function(d, i){
-                if (isNaN(parseFloat(d[expressed])))
-                    return yScale(0) + topBottomPadding;
-                else
-                    return yScale(parseFloat(d[expressed])) + topBottomPadding; 
-            })
-            .style("fill", function(d){            
-                var value = d[expressed];            
-                if(value) {                
-                    return colorScale(value);            
-                } else if (value == 0) {                
-                    return "#ffffff";            
-                } else{
-                    return "#ACADA8";   
-                }    
-        });
-    
-        var chartTitle = d3.select(".chartTitle")
-        .text("Number of " + expressed + "S in each National Park");
-    };
-    
-    function highlight(props){
-        console.log('hello')//change stroke
-        var selected = d3.selectAll(".d" + props.ID)
-            .style("stroke", "#E31B23")
-            .style("stroke-width", "2");
-    
-        setLabel(props)
-    };
-    
-    function dehighlight(props){
-        var selected = d3.selectAll(".d" + props.ID)
-            .style("stroke", function(){
-                return getStyle(this, "stroke")
-            })
-            .style("stroke-width", function(){
-                return getStyle(this, "stroke-width")
-            });
-    
-        function getStyle(element, styleName){
-            var styleText = d3.select(element)
-                .select("desc")
-                .text();
-    
-            var styleObject = JSON.parse(styleText);
-    
-            return styleObject[styleName];
-        };
-    
-        d3.select(".infolabel")
-            .remove();
-    };
-    
-    //function to create dynamic label
-    function setLabel(props){
-        //label content
-        var labelAttribute = "<h1>" + props[expressed] +
-            "</h1><b>" + expressed + "</b>";
-    
-        //create info label div
-        var infolabel = d3.select("body")
-            .append("div")
-            .attr("class", "infolabel")
-            .attr("id", props.ID + "_label")
-            .html(labelAttribute);
-    
-        var parkName = infolabel.append("div")
-            .attr("class", "labelname")
-            .html(props.NationalPark);
-    };
-    
-    //function to move info label with mouse
-    function moveLabel(){
-        //get width of label
-        var labelWidth = d3.select(".infolabel")
-            .node()
-            .getBoundingClientRect()
-            .width;
-        //use coordinates of mousemove event to set label coordinates
-        var x = event.clientX + 10,
-            y = event.clientY - 75 + window.scrollY
-            x2 = event.clientX - labelWidth - 10,
-            y2 = event.clientY + 25;
-    
-        //horizontal label coordinate, testing for overflow
-        var x = event.clientX > window.innerWidth - labelWidth - 20 ? x2 : x; 
-        //vertical label coordinate, testing for overflow
-        var y = event.clientY < 75 ? y2 : y;
-    
-        d3.select(".infolabel")
-            .style("left", x + "px")
-            .style("top", y + "px");
-    };
-    
-    })(); //finished wrapping everything
+
+    //check result
+    console.log(attributes);
+
+    return attributes;
+};
+
+function calcStats(data){
+    //create empty array to store all data values
+    var allValues = [];
+    //loop through each project
+    for(var project of data.features){
+        //get number of credits for project
+        var value = project.properties["Total_Number_of_Offset_Credits_Registered"];
+        //add value to array
+        allValues.push(value);
+    }
+    //get min, max, mean stats for our array
+    dataStats.min = Math.min(...allValues);
+    dataStats.max = Math.max(...allValues);
+    //calculate meanValue
+    var sum = allValues.reduce(function(a, b){return a+b;});
+    dataStats.mean = sum/ allValues.length;
+
+}
+
+document.addEventListener('DOMContentLoaded', createMap)
