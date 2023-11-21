@@ -87,14 +87,14 @@ function createPropSymbols(data, map, attributes) {
             
             return pointToLayer(feature, latlng, attributes);
         }
-    }).addTo(map),
-    console.log('hello');
+    }).addTo(map);
 }
 
-function createPopupContent(properties, attribute){
-    //add city to popup content string
-    var popupContent = "<p><b>Project Name:</b> " + properties.project + "</p>";
-    popupContent += "<p><b>Carbon Credits Issued: </b><h2>" + properties[attribute] + "</h2></p>";
+function createPopupContent(properties, carboncredits){
+    //add project to popup content string
+    //console.log("properties:", properties)
+    var popupContent = "<p><b>Project Name:</b> " + properties.Project_Name + "</p>";
+    popupContent += "<p><b>Carbon Credits Issued: </b><h2>" + properties[carboncredits] + "</h2></p>";
 
     return popupContent;
 };
@@ -103,10 +103,10 @@ function createPopupContent(properties, attribute){
 //to the new pointToLayer() function
 function pointToLayer(feature, latlng, attributes){
     
-    //Step 4: Assign the current attribute based on the first index of the attributes array
-    var attribute = attributes["Total_Number_of_Offset_Credits_Registered"];
+    //Step 4: Assign the carbon credits attribute based on its index in the attributes array
+    var carboncredits = attributes[14];
     //check
-    console.log(attribute);
+    //console.log(attribute);
 
     //create marker options
     var geojsonMarkerOptions = {
@@ -119,7 +119,8 @@ function pointToLayer(feature, latlng, attributes){
     };
 
     //Step 5: For each feature, determine its value for the selected attribute
-    var attValue = Number(feature.properties[attribute]);
+    var attValue = Number(feature.properties[carboncredits]);
+    //console.log("attValue:", attValue);
 
     //Step 6: Give each feature's circle marker a radius based on its attribute value
     geojsonMarkerOptions.radius = calcPropRadius(attValue);
@@ -127,11 +128,15 @@ function pointToLayer(feature, latlng, attributes){
     //create circle marker layer
     var layer = L.circleMarker(latlng, geojsonMarkerOptions);
 
-    var popupContent = createPopupContent(feature.properties, attribute);
+    var popupContent = createPopupContent(feature.properties, carboncredits);
 
     //bind the popup to the circle marker
     layer.bindPopup(popupContent, {
         offset: new L.Point(0,-geojsonMarkerOptions.radius) 
+    });
+
+    layer.on('click', function() {
+        map.setZoom(10);
     });
 
     //return the circle marker to the L.geoJson pointToLayer option
@@ -163,7 +168,8 @@ function createLegend(attributes, map){
 
             //Step 2: loop to add each circle and text to svg string
             for (var i=0; i<circles.length; i++){  
-                console.log(dataStats[circles[i]])
+                console.log("dataStats[circles[i]]", dataStats[circles[i]])
+                console.log("dataStats", dataStats)
                 //Step 3: assign the r and cy attributes  
                 var radius = calcPropRadius(dataStats[circles[i]]);  
                 var cy = 59 - radius;  
@@ -197,6 +203,7 @@ function processData(data){
 
     //properties of the first feature in the dataset
     var properties = data.features[0].properties;
+    //console.log("properties:", properties)
 
     //push each attribute name into attributes array
     for (var attribute in properties){
@@ -204,27 +211,40 @@ function processData(data){
     };
 
     //check result
-    console.log(attributes);
+    //console.log("attributes:", attributes);
+    
 
     return attributes;
 };
 
+function roundNumber(number) {
+    return Math.round(number / 1000) * 1000;
+}
+
 function calcStats(data){
     //create empty array to store all data values
-    var allValues = [];
+    var allValues = []
+    //console.log("allValues:",allValues)
+    
     //loop through each project
     for(var project of data.features){
         //get number of credits for project
-        var value = project.properties["Total_Number_of_Offset_Credits_Registered"];
+        //console.log("project.properties:", project.properties)
+        var carboncredits = project.properties["Total_Number_of_Offset_Credits_Registered"];
         //add value to array
-        allValues.push(value);
+        allValues.push(carboncredits);
     }
     //get min, max, mean stats for our array
-    dataStats.min = Math.min(...allValues);
-    dataStats.max = Math.max(...allValues);
+    minValue = roundNumber(Math.min(...allValues));
+    maxValue = roundNumber(Math.max(...allValues));
     //calculate meanValue
     var sum = allValues.reduce(function(a, b){return a+b;});
-    dataStats.mean = sum/ allValues.length;
+    meanValue = sum/ allValues.length;
+
+    //add caculated values to dataStats array
+    dataStats.min = minValue
+    dataStats.max = maxValue
+    dataStats.mean = roundNumber(meanValue)
 
 }
 
