@@ -94,6 +94,9 @@ function createPopupContent(properties, carboncredits){
     //add project to popup content string
     //console.log("properties:", properties)
     var popupContent = "<p><b>Project Name:</b> " + properties.Project_Name + "</p>";
+    popupContent += "<p><b>Project Developer:</b> " + properties.Project_Developer + "</p>";
+    popupContent += "<p><b>Registry:</b> " + properties.Registry + "</p>";
+    popupContent += "<p><b>Start Date:</b> " + properties.Project_Registered_Date_or_ACR_Current_Crediting_Period_Start_Date + "</p>";
     popupContent += "<p><b>Carbon Credits Issued: </b><h2>" + properties[carboncredits] + "</h2></p>";
 
     return popupContent;
