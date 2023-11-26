@@ -91,12 +91,16 @@ function createPropSymbols(data, map, attributes) {
 }
 
 function createPopupContent(properties, carboncredits){
+    //create variable for photo
+    var photoImg = '<img src="data/NDVI/Images/ACR282/ACR282_NDVIchange_test.png" height="150px" width="150px"/>';
+    
     //add project to popup content string
     //console.log("properties:", properties)
     var popupContent = "<p><b>Project Name:</b> " + properties.Project_Name + "</p>";
     popupContent += "<p><b>Project Developer:</b> " + properties.Project_Developer + "</p>";
     popupContent += "<p><b>Registry:</b> " + properties.Registry + "</p>";
     popupContent += "<p><b>Start Date:</b> " + properties.Project_Registered_Date_or_ACR_Current_Crediting_Period_Start_Date + "</p>";
+    popupContent += "<p><b>NDVI Change: </b><h2>" + photoImg + "</h2></p>";
     popupContent += "<p><b>Carbon Credits Issued: </b><h2>" + properties[carboncredits] + "</h2></p>";
 
     return popupContent;
