@@ -92,8 +92,9 @@ function createPropSymbols(data, map, attributes) {
 
 function createPopupContent(properties, carboncredits){
     //create variable for photo
-    var photoImg = '<img src="data/NDVI/Images/ACR282/ACR282_NDVIchange_test.png" height="150px" width="150px"/>';
-    
+    var photoImg = '<img src="data/NDVI/Images/' + properties.Project_ID + '/' + properties.Project_ID + '.png" height="150px" width="150px"/>';
+    //console.log([photoImg]);
+
     //add project to popup content string
     //console.log("properties:", properties)
     var popupContent = "<p><b>Project Name:</b> " + properties.Project_Name + "</p>";
