@@ -41,14 +41,14 @@ function calculateMinValue(data){
 }
 
 //calculate the radius of each proportional symbol
-function calcPropRadius(attValue) {
+/*function calcPropRadius(attValue) {
     //constant factor adjusts symbol sizes evenly
     var minRadius = 5;
     //Flannery Apperance Compensation formula
     var radius = 1.0083 * Math.pow(attValue/minValue,0.366) * minRadius
     
     return radius;
-};
+};*/
 
 //function to attach popups to each mapped featureg
 function onEachFeature(feature, layer) {
@@ -68,11 +68,13 @@ function getData(map) {
         .then(function (json) {
             //create an attributes array
             var attributes = processData(json);
-            minValue = calculateMinValue(json);
+            //minValue = calculateMinValue(json);
             //call function to create proportional symbols
+            console.log('calling prop symbols')
             createPropSymbols(json, map, attributes);
-            calcStats(json);
-            createLegend(attributes, map)
+            console.log('after creating prop symbols')
+            //calcStats(json);
+            //createLegend(attributes, map)
             //calling our renamed function  
         })
         
@@ -84,10 +86,12 @@ function createPropSymbols(data, map, attributes) {
     //create a Leaflet GeoJSON layer and add it to the map
     L.geoJson(data, {
         pointToLayer: function(feature, latlng){
-            
-            return pointToLayer(feature, latlng, attributes, map);
+            console.log('calling point to layer')
+            return pointToLayer(feature, latlng, attributes)
+            console.log('returning layer properties')
         }
     }).addTo(map);
+    console.log('after adding to map')
 }
 
 function createPopupContent(properties, carboncredits){
@@ -107,13 +111,24 @@ function createPopupContent(properties, carboncredits){
     return popupContent;
 };
 
+// Separate function for layer-only on click
+// Do not display a popup, it has already been set above
+function onLayerClick(e) {
+    console.log("onLayerClick ...")
+    map.setZoom(8)
+}
+// Set Click event for only the layer, not the entire map
+//layer.on('click', onLayerClick);
+
+
 
 //Replace the anonymous function within the createPropSymbols() function with a call 
 //to the new pointToLayer() function
-function pointToLayer(feature, latlng, attributes, map){
-    console.log("feature:", feature)
+function pointToLayer(feature, latlng, attributes){
+    console.log('starting')
     //Step 4: Assign the carbon credits attribute based on its index in the attributes array
-    var carboncredits = attributes[14];
+    //November 26 Testing
+    //var carboncredits = attributes[14];
     //check
     //console.log(attribute);
 
@@ -128,34 +143,49 @@ function pointToLayer(feature, latlng, attributes, map){
     };
 
     //Step 5: For each feature, determine its value for the selected attribute
-    var attValue = Number(feature.properties[carboncredits]);
+    //November 26 edits
+    //var attValue = Number(feature.properties[carboncredits]);
     //console.log("attValue:", attValue);
 
     //Step 6: Give each feature's circle marker a radius based on its attribute value
-    geojsonMarkerOptions.radius = calcPropRadius(attValue);
+    //geojsonMarkerOptions.radius = calcPropRadius(attValue);
+    geojsonMarkerOptions.radius = 40;
 
     //create circle marker layer
-    var layer = L.circleMarker(latlng, geojsonMarkerOptions);
+    //var layer = L.circleMarker(latlng, geojsonMarkerOptions);
+    //Testing 11/26 hardcoding the symbols
+    console.log('setting layer variable')
+    var layer = L.circleMarker((43.08, -89.21));
 
-    var popupContent = createPopupContent(feature.properties, carboncredits);
+    //November 26 Testing
+    //var popupContent = createPopupContent(feature.properties, carboncredits);
 
     //bind the popup to the circle marker
-    layer.bindPopup(popupContent, {
+    /*layer.bindPopup(popupContent, {
         offset: new L.Point(0,-geojsonMarkerOptions.radius) 
+    });*/
+
+    //November 26 testing edits
+    console.log('setting layer popup')
+    layer.bindPopup('test_popup', {
+        offset: new L.Point(0,40) 
     });
 
-    layer.on('click', function(e) {
-        map.setView(e.latlng,12);
-    });
+    //layer.on('click', function() {
+        //map.setZoom(10);
+    //});
+    console.log('setting layer on click')
+    layer.on('click', onLayerClick);
 
     //return the circle marker to the L.geoJson pointToLayer option
+    console.log('returning layer properties')
     return layer;
 }
 
 //Example 2.7: Adding a legend control in main.js
 
 
-function createLegend(attributes, map){
+/*function createLegend(attributes, map){
     var LegendControl = L.Control.extend({
         options: {
             position: 'topleft'
@@ -204,7 +234,7 @@ function createLegend(attributes, map){
     });
 
     map.addControl(new LegendControl());
-};
+};*/
 
 function processData(data){
     //empty array to hold attributes
@@ -226,9 +256,9 @@ function processData(data){
     return attributes;
 };
 
-function roundNumber(number) {
+/*function roundNumber(number) {
     return Math.round(number / 1000) * 1000;
-}
+}*/
 
 function calcStats(data){
     //create empty array to store all data values
@@ -243,6 +273,7 @@ function calcStats(data){
         //add value to array
         allValues.push(carboncredits);
     }
+    /*
     //get min, max, mean stats for our array
     minValue = roundNumber(Math.min(...allValues));
     maxValue = roundNumber(Math.max(...allValues));
@@ -254,6 +285,7 @@ function calcStats(data){
     dataStats.min = minValue
     dataStats.max = maxValue
     dataStats.mean = roundNumber(meanValue)
+    */
 
 }
 

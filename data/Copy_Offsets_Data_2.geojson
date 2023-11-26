@@ -1,0 +1,58 @@
+{
+   "type": "FeatureCollection",
+   "features": [
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ -123.5231756,39.5992165 ]
+    },
+    "properties": {
+    "Registry":"ACR",
+    "Project_ID":"ACR262",
+    "Compliance_Program_ID_ARB_or_Ecology":"CAFR5212",
+    "Project_Developer":"Ross Bewley",
+    "Project_Owner":"ACR doesn't list",
+    "Project_Name":"Bewley Ranches",
+    "Verification_Body_VVB":"",
+    "Project_Type":"Forest Carbon",
+    "Project_Methodology_or_Protocol":"ARB Compliance Offset Protocol: U.S. Forest Projects",
+    "Compliance_Program_Status_ARB_or_Ecology":"Listed - Active ARB Project",
+    "Project_Site_Location":"Mendocino County",
+    "Project_Site_State":"CALIFORNIA",
+    "Project_Site_Country":"US",
+    "Project_Notes_or_CAR_Status":"",
+    "Total_Number_of_Offset_Credits_Registered":886667,
+    "Project_Registered_Date_or_ACR_Current_Crediting_Period_Start_Date":"8/14/2014",
+    "Project_Status_Date":"8/4/2015"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ -123.8725412,41.4212181 ]
+    },
+    "properties": {
+    "Registry":"ACR",
+    "Project_ID":"ACR282",
+    "Compliance_Program_ID_ARB_or_Ecology":"CAFR5232",
+    "Project_Developer":"282",
+    "Project_Owner":"ACR doesn't list",
+    "Project_Name":"Blue Creek",
+    "Verification_Body_VVB":"S&A Carbon, LLC",
+    "Project_Type":"Forest Carbon",
+    "Project_Methodology_or_Protocol":"ARB Compliance Offset Protocol: U.S. Forest Projects",
+    "Compliance_Program_Status_ARB_or_Ecology":"Listed - Active ARB Project",
+    "Project_Site_Location":"Humboldt and Del Norte County, California",
+    "Project_Site_State":"CALIFORNIA",
+    "Project_Site_Country":"US",
+    "Project_Notes_or_CAR_Status":"",
+    "Total_Number_of_Offset_Credits_Registered":1348831,
+    "Project_Registered_Date_or_ACR_Current_Crediting_Period_Start_Date":"3/19/2015",
+    "Project_Status_Date":"10/14/2015"
+    }
+  }
+]
+}
+  
