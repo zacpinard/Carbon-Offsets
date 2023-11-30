@@ -152,14 +152,35 @@ function pointToLayer(feature, latlng, attributes, map){
 
     //bind the popup to the circle marker
     layer1.bindPopup(popupContent, {
-        offset: new L.Point(100,-geojsonMarkerOptions.radius - 50) 
+        //Need to fix offset
+        offset: new L.Point(0,-geojsonMarkerOptions.radius) 
     });
 
     layer1.on('click', function(e) {
-        
         //maybe try setWindow?
-        map.setView(e.latlng,11);
+        map.setView(e.latlng,12);
 
+        console.log("layer1:", layer1)
+
+        layer1.options.fillColor = "#FFFFFF"
+
+        /*
+        .then(function changeColor(e) {
+            if (clickElement.style.fillColor == "#4c5c44") {
+              clickElement.style.fillColorcolor = "FFFFFF";
+            } else {
+              clickElement.style.color = "#4c5c44";
+            }
+          })*/
+
+        /*.then(function changeColor2(layer1) {
+            if (target.options.fillColor == "#4c5c44") {
+                target.options.fillColor = "FFFFFF";
+            } else {
+                target.options.fillColor = "#4c5c44";
+            }
+          })*/
+        
         //load JSON file and add to map
         var loadGeoJSONPolygon = fetch("data/boundaries/active/" + feature.properties.Project_ID + ".json")
             .then(function(response) {
@@ -169,15 +190,11 @@ function pointToLayer(feature, latlng, attributes, map){
                 jsonlayer = L.geoJSON(data);
                 jsonlayer.addTo(map);
             })
-
-            /* Trying various ways to get circles to disappear on click and reappear on zoom out
-            to separate two of the same layers and have one transparent stay and the colored go
-
             .then(function(){
                 var layer1 = L.circleMarker(latlng, transparentGeojsonMarkerOptions);
             })
 
-            
+            /*
             .then(function(){
                 map.removeLayer(layer1);
                 layer2.bindPopup(popupContent, {

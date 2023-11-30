@@ -1,7 +1,7 @@
 /* Stylesheet by Zac Pinard, 2023 */
 
 body{
-    background-color: rgb(34, 139, 34);
+    background-color: #dee0b0;
 }
 
 /*Styling state borders in style.css 
@@ -26,18 +26,18 @@ body{
 
 #title { 
     font-family: 'Tribeca';
-    color: whitesmoke
+    color: #4c5c44
 }
 
 #text {
     font-family: Goudy Old Style;
     font-weight: bold;
     font-size: 1.25em;
-    color: whitesmoke
+    color: #4c5c44
 }
 
 
-#map { height: 500px;
+#map { height: 75vh;
     width: 90%;
     display: inline-block;
 }
@@ -50,27 +50,6 @@ body{
     line-height: 1px;  
     text-align: center;  
     border: solid rgb(34, 139, 34) 2px;
-}
-
-.range-slider {  
-    width: 250px;  
-}  
-
-.step {  
-    width: 40px;  
-}  
-
-.step img {  
-    width: 100%;  
-    height: auto;  
-} 
-
-#forward {
-    float: right;
-    }
-    
-#reverse {  
-    float: left;  
 }
 
 /*Example 2.3: Adjusting popup content margins in style.css */
