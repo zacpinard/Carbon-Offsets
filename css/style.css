@@ -17,7 +17,7 @@ body{
     stroke-width: 2px;
 }
 
-
+/*
 @font-face {
     font-family: 'Tribeca';
     src: URL('/assets/tribeca/Tribeca.ttf') format('truetype');
@@ -28,11 +28,17 @@ body{
     font-family: 'Tribeca';
     color: #4c5c44
 }
+*/
+
+#title {
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    color: #4c5c44
+}
 
 #text {
-    font-family: Goudy Old Style;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     font-weight: bold;
-    font-size: 1.25em;
+    font-size: 1.35em;
     color: #4c5c44
 }
 

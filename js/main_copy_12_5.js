@@ -49,6 +49,7 @@ function calcPropRadius(attValue) {
     return radius;
 };
 
+//Is this necessary?
 //function to attach popups to each mapped featureg
 function onEachFeature(feature, layer) {
 };
@@ -102,8 +103,8 @@ function createPopupContent(properties, carboncredits){
     popupContent += "<p><b>Start Date:</b>" + properties.Project_Registered_Date_or_ACR_Current_Crediting_Period_Start_Date + "</p>";
     popupContent += "<p><b>NDVI Change: </b><h2>" + photoImg + "</h2></p>";
     popupContent += "<p><b>Carbon Credits Issued: </b><h2>" + properties[carboncredits] + "</h2></p>";
-    //popupContent += "<p><b>Lat:</b>"+ [feature.geometry.coordinates[0]] + "</p>";
-    //popupContent += "<p><b>Long:</b>" + [feature.geometry.coordinates[1]] + "</p>"
+    //popupContent += "<p><b>Lat:</b>"+ feature.geometry.coordinates[0] + "</p>";
+    //popupContent += "<p><b>Long:</b>" + feature.geometry.coordinates[1] + "</p>"
 
     return popupContent;
 };
@@ -180,24 +181,60 @@ function pointToLayer(feature, latlng, attributes, map){
             .then(function(data) {
                 jsonlayer = L.geoJSON(data);
                 jsonlayer.addTo(map);
-                var projectGeometry = data.features[0].geometry.coordinates
+                var projectGeometry = data.features[0].geometry.coordinates//[0]
                 /*var allPoints = []
                 for (let i = 0; i < projectGeometry.length; i++){
-                    allPoints += projectGeometry[i], "]"
+                    console.log("projectGeometry: ", projectGeometry[i])
+                    allPoints += projectGeometry[i], ',', "]"
                 }
-                console.log(allPoints) */
+                //console.log("allPoints: ", allPoints)*/
 
-                //console.log('data: ', data.features[0].geometry.coordinates)
-                //map.setView(map.fitBounds(L.latLngBounds(L.latLng(allPoints))))
+                console.log('data: ', data.features[0].geometry.coordinates)
+                
                 bounds = jsonlayer.getBounds()
                 console.log("bounds: ", bounds)
+                //map.fitBounds(L.latLngBounds(L.latLng(map.getBounds(projectGeometry))))
+
+                //This doesn't work:
+                //map.fitBounds(L.latLngBounds(L.latLng(map.getBounds(projectGeometry))))
+                //console.log(map.fitBounds(map.getBounds(projectGeometry)))
+                //console.log(map.fitBounds(projectGeometry.getBounds()))
+                //console.log("map.getBounds(projectGeometry)[LatLngBounds] ", map.getBounds(projectGeometry)[LatLngBounds])
+                //console.log("map.getBounds(projectGeometry.LatLngBounds) ", map.getBounds(projectGeometry.LatLngBounds))
+                //console.log("map.getBounds(projectGeometry[0][0]) ", map.getBounds(projectGeometry[0][0]))
+                //console.log('bounds.LatLngBounds: ', bounds.LatLngBounds)
+                //console.log("data.getBounds(projectGeometry): ", data.getBounds(projectGeometry))
+                //console.log("data.getBounds(projectGeometry): ", data.getBounds(projectGeometry))
+
+                //Use OneNote from Microsoft
+
+
+                //console.log("projectGeometry.getBounds(): ", data.features[0].geometry.coordinates.getPaths())
+                
+                console.log('bounds._northEast.lat: ', bounds._northEast.lat)
+
+                var NE_lat = bounds._northEast.lat
+                var NE_lng = bounds._northEast.lng
+                NE_corner = L.latLng(NE_lat, NE_lng)
+
+                var SW_lat = bounds._southWest.lat
+                var SW_lng = bounds._southWest.lng
+                SW_corner = L.latLng(SW_lat, SW_lng)
+
+                console.log(NE_lat, NE_lng, SW_lat, SW_lng)
 
                 map.fitBounds([[bounds._northEast],[bounds._southWest]])
+
+
+
+
+
+                //map.fitBounds(map.getBounds(projectGeometry))
             })
-            /*.then(function(data) {
+            .then(function(data) {
                 var latLngBounds = data//.features[0].geometry.coordinates[1];
                 console.log("latLngBounds: ", latLngBounds)
-            })*/
+            })
             /*.then(function(response){
                 var jsonresponse = response.json()
                 console.log("jsonresponse: ", jsonresponse)
