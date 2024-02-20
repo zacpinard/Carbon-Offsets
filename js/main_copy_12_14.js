@@ -148,14 +148,20 @@ function pointToLayer(feature, latlng, attributes, map){
     //create circle marker layer
     var layer1 = L.circleMarker(latlng, geojsonMarkerOptions);
     var layer2 = L.circleMarker(latlng, transparentGeojsonMarkerOptions);
-
+    layer1.addTo(map)
 
     var popupContent = createPopupContent(feature.properties, carboncredits);
 
     
     console.log("coordinates: ", [feature.geometry.coordinates[0]],[feature.geometry.coordinates[1]])
     
+
     //bind the popup to the circle marker
+    /*layer1.bindPopup(popupContent,{
+        //offset: new L.Point(100,-geojsonMarkerOptions.radius)
+        offset: new L.Point([feature.geometry.coordinates[0]],[feature.geometry.coordinates[1]])
+        //offset: feature
+    });*/
     layer2.bindPopup(popupContent,{
         //offset: new L.Point(100,-geojsonMarkerOptions.radius)
         offset: new L.Point([feature.geometry.coordinates[0]],[feature.geometry.coordinates[1]])
@@ -177,7 +183,6 @@ function pointToLayer(feature, latlng, attributes, map){
                 var jsonresponse = response.json()
                 return jsonresponse;
             })
-
             .then(function(data) {
                 jsonlayer = L.geoJSON(data);
                 jsonlayer.addTo(map);
@@ -199,20 +204,10 @@ function pointToLayer(feature, latlng, attributes, map){
                 layer1.remove()
                 layer2.addTo(map)
                 layer2.openPopup()
+                /*document.addEventListener("DOMContentLoaded", function(event) { 
+                    modal.style.display = "block";
+                 })*/
             })
-            .then(map.on('zoomend', function(data) {
-                layer1.addTo(map)
-                layer2.closePopup()
-            }))
-            
-            /*
-            //This currently doesn't work
-            .then(map.on('zoomend', function(data) {
-                //jsonlayer.remove()
-            }))
-            */
-
-
 
             /*.then(function(data) {
                 var latLngBounds = data//.features[0].geometry.coordinates[1];
@@ -250,7 +245,7 @@ function pointToLayer(feature, latlng, attributes, map){
 
         //var layer = L.circleMarker(latlng, transparentGeojsonMarkerOptions).addTo(map);
         //map.fitBounds(response)
-        //console.log(loadGeoJSONPolygon)
+        console.log(loadGeoJSONPolygon)
         //console.log("geojsonMarkerOptions:", geojsonMarkerOptions)
     });
 
