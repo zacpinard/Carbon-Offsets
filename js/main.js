@@ -12,10 +12,17 @@ function createMap() {
         zoom: 3.5
     });
 
+    var OpenStreetMap_Mapnik = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    });
+    /*
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     }).addTo(map);    
-    
+    */
+
+    OpenStreetMap_Mapnik.addTo(map);
     //call getData function
     getData(map);
 };
