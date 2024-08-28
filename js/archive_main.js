@@ -12,12 +12,20 @@ function createMap() {
         zoom: 3.5
     });
 
-    L.tileLayer('https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}{r}.{ext}', {
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    }).addTo(map);
+
+    /*L.tileLayer('https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}{r}.{ext}', {
         minZoom: 0,
         maxZoom: 18,
-        attribution: '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://www.stamen.com/" target="_blank">Stamen Design</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        //attribution: '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://www.stamen.com/" target="_blank">Stamen Design</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        attribution: '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://www.stamen.com/" target="_blank">Stamen Design</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://stamen.com/" target="_blank">Stamen Design</a>',
+        //attribution: '&copy; <a href="https://stadiamaps.com/" target="_blank">Stadia Maps</a>&copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a>&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a>',
+        Authorization: 'Stadia-Auth 502fff87-7877-46cf-a784-0e0b8e563a03',
         ext: 'png'
-    }).addTo(map);    
+    }).addTo(map); */   
     
     //call getData function
     getData(map);
@@ -148,20 +156,14 @@ function pointToLayer(feature, latlng, attributes, map){
     //create circle marker layer
     var layer1 = L.circleMarker(latlng, geojsonMarkerOptions);
     var layer2 = L.circleMarker(latlng, transparentGeojsonMarkerOptions);
-    layer1.addTo(map)
+
 
     var popupContent = createPopupContent(feature.properties, carboncredits);
 
     
     console.log("coordinates: ", [feature.geometry.coordinates[0]],[feature.geometry.coordinates[1]])
     
-
     //bind the popup to the circle marker
-    /*layer1.bindPopup(popupContent,{
-        //offset: new L.Point(100,-geojsonMarkerOptions.radius)
-        offset: new L.Point([feature.geometry.coordinates[0]],[feature.geometry.coordinates[1]])
-        //offset: feature
-    });*/
     layer2.bindPopup(popupContent,{
         //offset: new L.Point(100,-geojsonMarkerOptions.radius)
         offset: new L.Point([feature.geometry.coordinates[0]],[feature.geometry.coordinates[1]])
@@ -183,6 +185,7 @@ function pointToLayer(feature, latlng, attributes, map){
                 var jsonresponse = response.json()
                 return jsonresponse;
             })
+
             .then(function(data) {
                 jsonlayer = L.geoJSON(data);
                 jsonlayer.addTo(map);
@@ -204,10 +207,20 @@ function pointToLayer(feature, latlng, attributes, map){
                 layer1.remove()
                 layer2.addTo(map)
                 layer2.openPopup()
-                /*document.addEventListener("DOMContentLoaded", function(event) { 
-                    modal.style.display = "block";
-                 })*/
             })
+            .then(map.on('zoomend', function(data) {
+                layer1.addTo(map)
+                layer2.closePopup()
+            }))
+            
+            /*
+            //This currently doesn't work
+            .then(map.on('zoomend', function(data) {
+                //jsonlayer.remove()
+            }))
+            */
+
+
 
             /*.then(function(data) {
                 var latLngBounds = data//.features[0].geometry.coordinates[1];
@@ -245,7 +258,7 @@ function pointToLayer(feature, latlng, attributes, map){
 
         //var layer = L.circleMarker(latlng, transparentGeojsonMarkerOptions).addTo(map);
         //map.fitBounds(response)
-        console.log(loadGeoJSONPolygon)
+        //console.log(loadGeoJSONPolygon)
         //console.log("geojsonMarkerOptions:", geojsonMarkerOptions)
     });
 
