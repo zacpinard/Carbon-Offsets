@@ -4,31 +4,11 @@ body{
     background-color: #dee0b0;
 }
 
-/*Styling state borders in style.css 
-.states {
-    fill: #FFD580;
-    stroke: #D27D2D;
-    stroke-width: 2px;
-}*/
-
 .projects {
     fill: #7CFC00;
     stroke: #6a4a3a;
     stroke-width: 2px;
 }
-
-/*
-@font-face {
-    font-family: 'Tribeca';
-    src: URL('/assets/tribeca/Tribeca.ttf') format('truetype');
-    color: #553b32;
-}
-
-#title { 
-    font-family: 'Tribeca';
-    color: #4c5c44
-}
-*/
 
 #title {
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
@@ -41,7 +21,6 @@ body{
     font-size: 1.35em;
     color: #4c5c44
 }
-
 
 #map { height: 75vh;
     width: 90%;
@@ -58,12 +37,7 @@ body{
     border: solid rgb(34, 139, 34) 2px;
 }
 
-/*Example 2.3: Adjusting popup content margins in style.css */
+/* Adjusting popup content margins in style.css */
 .leaflet-popup-content p {
     margin: 0.2em 0;
-}
-
-h2 {
-    height: "1000";
-    width: "3000";
 }
