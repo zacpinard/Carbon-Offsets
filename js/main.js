@@ -96,7 +96,6 @@ function createPopupContent(properties, carboncredits){
     return popupContent;
 };
 
-
 //Replace the anonymous function within the createPropSymbols() function with a call to the new pointToLayer() function
 function pointToLayer(feature, latlng, attributes, map){
     //Assign the carbon credits attribute based on its index in the attributes array
@@ -155,8 +154,6 @@ function pointToLayer(feature, latlng, attributes, map){
     //return the circle marker to the L.geoJson pointToLayer option
     return layer1;
 }
-
-
 
 //Add a legend control
 function createLegend(attributes, map){
