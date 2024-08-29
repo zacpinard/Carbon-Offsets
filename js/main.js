@@ -16,12 +16,6 @@ function createMap() {
         maxZoom: 19,
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     });
-    
-    /*
-    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-    }).addTo(map);    
-    */
 
     OpenStreetMap_Mapnik.addTo(map);
     //call getData function
@@ -63,7 +57,7 @@ function onEachFeature(feature, layer) {
 function getData(map) {
     
     //load the data
-    fetch("data/Offsets_Data_test_2.geojson")
+    fetch("data/Offsets_Data.geojson")
         
         .then(function (response) {
             return response.json();
@@ -127,12 +121,13 @@ function pointToLayer(feature, latlng, attributes, map){
     var geojsonMarkerOptions = {
         radius: 8,
         fillColor: "#4c5c44",
-        color: "#FFFFFF",
-        weight: 1,
+        color: "#CC5500",
+        weight: 2,
         opacity: 1,
         fillOpacity: 0.8
     };
 
+    /*
     var transparentGeojsonMarkerOptions = {
         radius: 8,
         fillColor: "#4c5c44",
@@ -141,6 +136,7 @@ function pointToLayer(feature, latlng, attributes, map){
         opacity: 1,
         fillOpacity: 0
     };
+    */
 
     //Step 5: For each feature, determine its value for the selected attribute
     var attValue = Number(feature.properties[carboncredits]);
@@ -148,11 +144,11 @@ function pointToLayer(feature, latlng, attributes, map){
 
     //Step 6: Give each feature's circle marker a radius based on its attribute value
     geojsonMarkerOptions.radius = calcPropRadius(attValue);
-    transparentGeojsonMarkerOptions.radius = calcPropRadius(attValue);
+    //transparentGeojsonMarkerOptions.radius = calcPropRadius(attValue);
 
     //create circle marker layer
     var layer1 = L.circleMarker(latlng, geojsonMarkerOptions);
-    var layer2 = L.circleMarker(latlng, transparentGeojsonMarkerOptions);
+    //var layer2 = L.circleMarker(latlng, transparentGeojsonMarkerOptions);
     layer1.addTo(map)
 
     var popupContent = createPopupContent(feature.properties, carboncredits);
@@ -162,16 +158,17 @@ function pointToLayer(feature, latlng, attributes, map){
     
 
     //bind the popup to the circle marker
-    /*layer1.bindPopup(popupContent,{
+    layer1.bindPopup(popupContent,{
+        offset: new L.Point(100,-geojsonMarkerOptions.radius)
+        //offset: new L.Point([feature.geometry.coordinates[0]],[feature.geometry.coordinates[1]])
+        //offset: feature
+    });
+    
+    /*layer2.bindPopup(popupContent,{
         //offset: new L.Point(100,-geojsonMarkerOptions.radius)
         offset: new L.Point([feature.geometry.coordinates[0]],[feature.geometry.coordinates[1]])
         //offset: feature
     });*/
-    layer2.bindPopup(popupContent,{
-        //offset: new L.Point(100,-geojsonMarkerOptions.radius)
-        offset: new L.Point([feature.geometry.coordinates[0]],[feature.geometry.coordinates[1]])
-        //offset: feature
-    });
 
     layer1.on('click', function(e) {
         
@@ -206,9 +203,10 @@ function pointToLayer(feature, latlng, attributes, map){
                 map.fitBounds([[bounds._northEast],[bounds._southWest]])
             })
             .then(function(data){
-                layer1.remove()
-                layer2.addTo(map)
-                layer2.openPopup()
+                layer1.openPopup();
+                //layer1.remove()
+                //layer2.addTo(map)
+                //layer2.openPopup()
                 /*document.addEventListener("DOMContentLoaded", function(event) { 
                     modal.style.display = "block";
                  })*/
@@ -292,7 +290,7 @@ function createLegend(attributes, map){
                 var cy = 59 - radius;  
     
                 //circle string  
-                svg += '<circle class="legend-circle" id="' + circles[i] + '" r="' + radius + '"cy="' + cy + '" fill="#4c5c44" fill-opacity="0.8" stroke="#FFFFFF" cx="30"/>';
+                svg += '<circle class="legend-circle" id="' + circles[i] + '" r="' + radius + '"cy="' + cy + '" fill="#4c5c44" fill-opacity="0.8" stroke="#CC5500" stroke-width="2" cx="30"/>';
                 
                  //evenly space out labels            
                 var textY = i * 20 + 20;            
