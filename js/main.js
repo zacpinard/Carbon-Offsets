@@ -1,7 +1,5 @@
 /* Main Javascript sheet by Zac Pinard, 2023 */
 
-/* Map of GeoJSON data from Offsets_Data_test_2.geojson */
-
 var dataStats = {};
 
 //function to instantiate the Leaflet map
@@ -44,7 +42,6 @@ function calcPropRadius(attValue) {
     var minRadius = 5;
     //Flannery Apperance Compensation formula
     var radius = 1.0083 * Math.pow(attValue/minValue,0.366) * minRadius
-    
     return radius;
 };
 
@@ -52,7 +49,7 @@ function calcPropRadius(attValue) {
 function onEachFeature(feature, layer) {
 };
 
-//Step 2: Import GeoJSON data
+//Import GeoJSON data
 //function to retrieve the data and place it on the map
 function getData(map) {
     
@@ -70,10 +67,8 @@ function getData(map) {
             //call function to create proportional symbols
             createPropSymbols(json, map, attributes);
             calcStats(json);
-            createLegend(attributes, map)
-            //calling our renamed function  
+            createLegend(attributes, map)  
         })
-        
 }
 
 //Step 3: Add circle markers for point features to the map
@@ -82,7 +77,6 @@ function createPropSymbols(data, map, attributes) {
     //create a Leaflet GeoJSON layer and add it to the map
     L.geoJson(data, {
         pointToLayer: function(feature, latlng){
-            
             return pointToLayer(feature, latlng, attributes, map);
         }
     }).addTo(map);
@@ -90,33 +84,23 @@ function createPropSymbols(data, map, attributes) {
 
 function createPopupContent(properties, carboncredits){
     //create variable for photo
-    var photoImg = '<img src="data/NDVI/Images/' + properties.Project_ID + '/' + properties.Project_ID + '.png" height="150px" width="150px"/>';
-    //console.log([photoImg]);
+    var photoImg = '<img src="data/NDVI/' + properties.Project_ID + '/' + properties.Project_ID + '.png" height="300px" width="300px"/>';
 
     //add project to popup content string
-    //console.log("properties:", properties)
     var popupContent = "<p><b>Project Name:</b> " + properties.Project_Name + "</p>";
     popupContent += "<p><b>Project Developer:</b> " + properties.Project_Developer + "</p>";
     popupContent += "<p><b>Registry:</b> " + properties.Registry + "</p>";
     popupContent += "<p><b>Start Date:</b>" + properties.Project_Registered_Date_or_ACR_Current_Crediting_Period_Start_Date + "</p>";
-    popupContent += "<p><b>NDVI Change: </b><h2>" + photoImg + "</h2></p>";
+    popupContent += "<p><b>NDVI Gain: </b><h2>" + photoImg + "</h2></p>";
     popupContent += "<p><b>Carbon Credits Issued: </b><h2>" + properties[carboncredits] + "</h2></p>";
-    //popupContent += "<p><b>Lat:</b>"+ [feature.geometry.coordinates[0]] + "</p>";
-    //popupContent += "<p><b>Long:</b>" + [feature.geometry.coordinates[1]] + "</p>"
-
     return popupContent;
 };
 
 
-//Replace the anonymous function within the createPropSymbols() function with a call 
-//to the new pointToLayer() function
+//Replace the anonymous function within the createPropSymbols() function with a call to the new pointToLayer() function
 function pointToLayer(feature, latlng, attributes, map){
-    //console.log("feature:", feature)
-    //Step 4: Assign the carbon credits attribute based on its index in the attributes array
+    //Assign the carbon credits attribute based on its index in the attributes array
     var carboncredits = attributes[14];
-    //check
-    //console.log(attribute);
-
     //create marker options
     var geojsonMarkerOptions = {
         radius: 8,
@@ -127,60 +111,27 @@ function pointToLayer(feature, latlng, attributes, map){
         fillOpacity: 0.8
     };
 
-    /*
-    var transparentGeojsonMarkerOptions = {
-        radius: 8,
-        fillColor: "#4c5c44",
-        color: "#FFFFFF",
-        weight: 1,
-        opacity: 1,
-        fillOpacity: 0
-    };
-    */
-
-    //Step 5: For each feature, determine its value for the selected attribute
+    //For each feature, determine its value for the selected attribute
     var attValue = Number(feature.properties[carboncredits]);
-    //console.log("attValue:", attValue);
 
-    //Step 6: Give each feature's circle marker a radius based on its attribute value
+    //Give each feature's circle marker a radius based on its attribute value
     geojsonMarkerOptions.radius = calcPropRadius(attValue);
-    //transparentGeojsonMarkerOptions.radius = calcPropRadius(attValue);
 
     //create circle marker layer
     var layer1 = L.circleMarker(latlng, geojsonMarkerOptions);
-    //var layer2 = L.circleMarker(latlng, transparentGeojsonMarkerOptions);
     layer1.addTo(map)
 
     var popupContent = createPopupContent(feature.properties, carboncredits);
-
-    
     console.log("coordinates: ", [feature.geometry.coordinates[0]],[feature.geometry.coordinates[1]])
     
-
     //bind the popup to the circle marker
     layer1.bindPopup(popupContent,{
         offset: new L.Point(100,-geojsonMarkerOptions.radius)
-        //offset: new L.Point([feature.geometry.coordinates[0]],[feature.geometry.coordinates[1]])
-        //offset: feature
     });
     
-    /*layer2.bindPopup(popupContent,{
-        //offset: new L.Point(100,-geojsonMarkerOptions.radius)
-        offset: new L.Point([feature.geometry.coordinates[0]],[feature.geometry.coordinates[1]])
-        //offset: feature
-    });*/
-
     layer1.on('click', function(e) {
-        
-
-        //https://leafletjs.com/reference.html#map-fitbounds
-        //map.setView(e.latlng,11);
-        //map.setView(map.fitBounds(loadGeoJSONPolygon))
-        
-        
-
         //load JSON file and add to map
-        var loadGeoJSONPolygon = fetch("data/boundaries/active/" + feature.properties.Project_ID + ".json")
+        var loadGeoJSONPolygon = fetch("data/boundaries/" + feature.properties.Project_ID + ".json")
             .then(function(response) {
                 var jsonresponse = response.json()
                 return jsonresponse;
@@ -189,68 +140,17 @@ function pointToLayer(feature, latlng, attributes, map){
                 jsonlayer = L.geoJSON(data);
                 jsonlayer.addTo(map);
                 var projectGeometry = data.features[0].geometry.coordinates
-                /*var allPoints = []
-                for (let i = 0; i < projectGeometry.length; i++){
-                    allPoints += projectGeometry[i], "]"
-                }
-                console.log(allPoints) */
-
-                //console.log('data: ', data.features[0].geometry.coordinates)
-                //map.setView(map.fitBounds(L.latLngBounds(L.latLng(allPoints))))
                 bounds = jsonlayer.getBounds()
                 console.log("bounds: ", bounds)
-
                 map.fitBounds([[bounds._northEast],[bounds._southWest]])
             })
             .then(function(data){
                 layer1.openPopup();
-                //layer1.remove()
-                //layer2.addTo(map)
-                //layer2.openPopup()
-                /*document.addEventListener("DOMContentLoaded", function(event) { 
-                    modal.style.display = "block";
-                 })*/
             })
-
-            /*.then(function(data) {
-                var latLngBounds = data//.features[0].geometry.coordinates[1];
-                console.log("latLngBounds: ", latLngBounds)
-            })*/
-            /*.then(function(response){
-                var jsonresponse = response.json()
-                console.log("jsonresponse: ", jsonresponse)
-            })*/
             
-            /* Trying various ways to get circles to disappear on click and reappear on zoom out
-            to separate two of the same layers and have one transparent stay and the colored go
-
-            .then(function(){
-                var layer1 = L.circleMarker(latlng, transparentGeojsonMarkerOptions);
-            })
-
-            
-            .then(function(){
-                map.removeLayer(layer1);
-                layer2.bindPopup(popupContent, {
-                    offset: new L.Point(0,-geojsonMarkerOptions.radius)
-                })
-                map.addLayer(layer2);
-            })
-            .then(function(){
-                map.on('mouseout', function(){
-                    map.removeLayer(layer2);
-                    map.removeLayer(jsonlayer);
-                    map.addLayer(layer1)
-                })
-            
-            })
-            */
-
-        //var layer = L.circleMarker(latlng, transparentGeojsonMarkerOptions).addTo(map);
-        //map.fitBounds(response)
         console.log(loadGeoJSONPolygon)
-        //console.log("geojsonMarkerOptions:", geojsonMarkerOptions)
     });
+
 
     //return the circle marker to the L.geoJson pointToLayer option
     return layer1;
@@ -258,9 +158,7 @@ function pointToLayer(feature, latlng, attributes, map){
 
 
 
-//Example 2.7: Adding a legend control in main.js
-
-
+//Add a legend control
 function createLegend(attributes, map){
     var LegendControl = L.Control.extend({
         options: {
@@ -271,28 +169,27 @@ function createLegend(attributes, map){
             // create the control container with a particular class name
             var container = L.DomUtil.create('div', 'legend-control-container');
 
-            //PUT YOUR SCRIPT TO CREATE THE TEMPORAL LEGEND HERE
             //add formatted attribute to panel content string
             container.insertAdjacentHTML('beforeend', "<p><b>Offset Project Carbon Credits</b></p>")
 
-            //Step 1: start attribute legend svg string
+            //Start attribute legend svg string
             var svg = '<svg id="attribute-legend" width="160px" height="60px">';
 
-            //array of circle names to base loop on
+            //Array of circle names to base loop on
             var circles = ["max", "mean", "min"];
 
-            //Step 2: loop to add each circle and text to svg string
+            //Loop to add each circle and text to svg string
             for (var i=0; i<circles.length; i++){  
                 console.log("dataStats[circles[i]]", dataStats[circles[i]])
                 console.log("dataStats", dataStats)
-                //Step 3: assign the r and cy attributes  
+                //Assign the r and cy attributes  
                 var radius = calcPropRadius(dataStats[circles[i]]);  
                 var cy = 59 - radius;  
     
                 //circle string  
                 svg += '<circle class="legend-circle" id="' + circles[i] + '" r="' + radius + '"cy="' + cy + '" fill="#4c5c44" fill-opacity="0.8" stroke="#CC5500" stroke-width="2" cx="30"/>';
                 
-                 //evenly space out labels            
+                //evenly space out labels            
                 var textY = i * 20 + 20;            
 
                 //text string            
@@ -304,11 +201,9 @@ function createLegend(attributes, map){
 
         //add attribute legend svg to container
         container.insertAdjacentHTML('beforeend',svg);
-
             return container;
         }
     });
-
     map.addControl(new LegendControl());
 };
 
@@ -318,17 +213,11 @@ function processData(data){
 
     //properties of the first feature in the dataset
     var properties = data.features[0].properties;
-    //console.log("properties:", properties)
 
     //push each attribute name into attributes array
     for (var attribute in properties){
         attributes.push(attribute);
     };
-
-    //check result
-    //console.log("attributes:", attributes);
-    
-
     return attributes;
 };
 
@@ -339,12 +228,10 @@ function roundNumber(number) {
 function calcStats(data){
     //create empty array to store all data values
     var allValues = []
-    //console.log("allValues:",allValues)
     
     //loop through each project
     for(var project of data.features){
         //get number of credits for project
-        //console.log("project.properties:", project.properties)
         var carboncredits = project.properties["Total_Number_of_Offset_Credits_Registered"];
         //add value to array
         allValues.push(carboncredits);
@@ -360,7 +247,6 @@ function calcStats(data){
     dataStats.min = minValue
     dataStats.max = maxValue
     dataStats.mean = roundNumber(meanValue)
-
 }
 
 document.addEventListener('DOMContentLoaded', createMap)

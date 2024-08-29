@@ -8,7 +8,7 @@
        "coordinates":  [ -123.5231756,39.5992165 ]
     },
     "properties": {
-    "Registry":"ACR",
+    "Registry":"American Carbon Registry",
     "Project_ID":"ACR262",
     "Compliance_Program_ID_ARB_or_Ecology":"CAFR5212",
     "Project_Developer":"Ross Bewley",
@@ -34,7 +34,7 @@
        "coordinates":  [ -123.8725412,41.4212181 ]
     },
     "properties": {
-    "Registry":"ACR",
+    "Registry":"American Carbon Registry",
     "Project_ID":"ACR282",
     "Compliance_Program_ID_ARB_or_Ecology":"CAFR5232",
     "Project_Developer":"282",
@@ -60,7 +60,7 @@
        "coordinates":  [ -80.9678268,38.4537404 ]
     },
     "properties": {
-    "Registry":"ACR",
+    "Registry":"American Carbon Registry",
     "Project_ID":"ACR276",
     "Compliance_Program_ID_ARB_or_Ecology":"CAFR5226",
     "Project_Developer":"Blue Source",
@@ -86,7 +86,7 @@
        "coordinates":  [ -73.2456983,41.9473471 ]
     },
     "properties": {
-    "Registry":"ACR",
+    "Registry":"American Carbon Registry",
     "Project_ID":"ACR371",
     "Compliance_Program_ID_ARB_or_Ecology":"CAFR5371",
     "Project_Developer":"Blue Source",
@@ -112,7 +112,7 @@
        "coordinates":  [ -81.5979827,37.9970331 ]
     },
     "properties": {
-    "Registry":"ACR",
+    "Registry":"American Carbon Registry",
     "Project_ID":"ACR280",
     "Compliance_Program_ID_ARB_or_Ecology":"CAFR5230",
     "Project_Developer":"Blue Source",
@@ -138,7 +138,7 @@
        "coordinates":  [ -90.8220468,45.733385 ]
     },
     "properties": {
-    "Registry":"ACR",
+    "Registry":"American Carbon Registry",
     "Project_ID":"ACR373",
     "Compliance_Program_ID_ARB_or_Ecology":"CAFR5373",
     "Project_Developer":"Blue Source",
@@ -164,7 +164,7 @@
        "coordinates":  [ -122.0342816,46.7709151 ]
     },
     "properties": {
-    "Registry":"CAR",
+    "Registry":"Climate Action Reserve",
     "Project_ID":"CAR1094",
     "Compliance_Program_ID_ARB_or_Ecology":"CAFR5095",
     "Project_Developer":"Nisqually Land Trust",
@@ -190,7 +190,7 @@
        "coordinates":  [ -123.6437589,39.2926382 ]
     },
     "properties": {
-    "Registry":"CAR",
+    "Registry":"Climate Action Reserve",
     "Project_ID":"CAR1100",
     "Compliance_Program_ID_ARB_or_Ecology":"CAFR5106",
     "Project_Developer":"The Conservation Fund",
@@ -216,7 +216,7 @@
        "coordinates":  [ -86.4625474,46.5424553 ]
     },
     "properties": {
-    "Registry":"CAR",
+    "Registry":"Climate Action Reserve",
     "Project_ID":"CAR973",
     "Compliance_Program_ID_ARB_or_Ecology":"CAFR5003",
     "Project_Developer":"Blue Source, LLC",
@@ -242,7 +242,7 @@
        "coordinates":  [ -88.8495936,45.2578844 ]
     },
     "properties": {
-    "Registry":"CAR",
+    "Registry":"Climate Action Reserve",
     "Project_ID":"CAR1209",
     "Compliance_Program_ID_ARB_or_Ecology":"CAFR5309",
     "Project_Developer":"Blue Source, LLC",
@@ -268,7 +268,7 @@
        "coordinates":  [ -83.788359,36.6485704 ]
     },
     "properties": {
-    "Registry":"CAR",
+    "Registry":"Climate Action Reserve",
     "Project_ID":"CAR1215",
     "Compliance_Program_ID_ARB_or_Ecology":"CAFR5315",
     "Project_Developer":"The Nature Conservancy",
@@ -294,7 +294,7 @@
        "coordinates":  [ -143.9222654,60.3213519 ]
     },
     "properties": {
-    "Registry":"CAR",
+    "Registry":"Climate Action Reserve",
     "Project_ID":"CAR1264",
     "Compliance_Program_ID_ARB_or_Ecology":"CAFR5364",
     "Project_Developer":"Forest Carbon Partners, L.P.",

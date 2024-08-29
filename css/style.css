@@ -62,3 +62,8 @@ body{
 .leaflet-popup-content p {
     margin: 0.2em 0;
 }
+
+h2 {
+    height: "1000";
+    width: "3000";
+}
